@@ -15,9 +15,10 @@ RUN apt-get install -y wget && \
 
 WORKDIR /root
 
-RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.19.3-stable.tar.xz 
+RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.19.3-stable.tar.xz
 
-RUN tar xf /root/flutter_linux_3.19.3-stable.tar.xz
+RUN tar xf /root/flutter_linux_3.19.3-stable.tar.xz && \
+    rm /root/flutter_linux_3.19.3-stable.tar.xz
 
 RUN export PATH="$PATH:`pwd`/flutter/bin" && \
     git config --global --add safe.directory /root/flutter && \
