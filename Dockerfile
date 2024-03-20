@@ -17,12 +17,15 @@ WORKDIR /root
 
 RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.19.3-stable.tar.xz
 
-RUN tar xf /root/flutter_linux_3.19.3-stable.tar.xz && \
-    rm /root/flutter_linux_3.19.3-stable.tar.xz
+RUN mkdir /flutter && \
+    tar xf /root/flutter_linux_3.19.3-stable.tar.xz -C /flutter && \
+    rm /root/flutter_linux_3.19.3-stable.tar.xz && \
+    git config --global --add safe.directory /flutter/flutter
+    
+ENV PATH="/flutter/flutter/bin:${PATH}"
 
-RUN export PATH="$PATH:`pwd`/flutter/bin" && \
-    git config --global --add safe.directory /root/flutter && \
-    flutter config --no-cli-animations && \
+RUN flutter --version
+
+RUN flutter config --no-cli-animations && \
     flutter doctor -v 
 
-RUN ls /usr/lib/android-sdk/platform-tools
