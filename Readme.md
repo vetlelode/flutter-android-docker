@@ -1,0 +1,1 @@
+An attempt at creating a dockerfile for building Flutter web and/or androidapps

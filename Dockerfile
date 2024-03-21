@@ -27,5 +27,9 @@ ENV PATH="/flutter/flutter/bin:${PATH}"
 RUN flutter --version
 
 RUN flutter config --no-cli-animations && \
-    flutter doctor -v 
+    flutter doctor -v && \
+    flutter pub global activate script_runner
 
+ENV PATH="/root/.pub-cache/bin:${PATH}"
+
+RUN which scr
