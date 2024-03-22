@@ -8,21 +8,26 @@ RUN apt-get install -y wget && \
     apt-get install -y curl && \
     apt-get install -y xz-utils && \
     apt install openjdk-17-jdk -y && \
-    apt install openjdk-17-jre -y
+    apt install openjdk-17-jre -y && \
+    apt install android-sdk -y
 
 RUN apt-get install ruby-full -y && ruby -v && \
     gem install fastlane 
  
 WORKDIR /root
 
-RUN wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip && \
-    mkdir /android-sdk && \
-    unzip /root/commandlinetools-linux-11076708_latest.zip -d /android-sdk && \
+RUN wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip && \
+    mkdir -p /usr/lib/android-sdk/cmdline-tools/latest && \
+    unzip /root/commandlinetools-linux-11076708_latest.zip -d /usr/lib/android-sdk/ && \
     rm /root/commandlinetools-linux-11076708_latest.zip
 
-ENV PATH="/android-sdk/cmdline-tools/bin:${PATH}"
+ENV PATH="/usr/lib/android-sdk/cmdline-tools/bin:${PATH}"
 
-RUN wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.19.3-stable.tar.xz
+RUN ls /usr/lib/android-sdk/cmdline-tools/bin
+
+RUN sdkmanager "platform-tools" "platforms;android-33" --sdk_root=/usr/lib/android-sdk/
+
+RUN wget -q https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.19.3-stable.tar.xz
 
 RUN mkdir /flutter && \
     tar xf /root/flutter_linux_3.19.3-stable.tar.xz -C /flutter && \
@@ -38,5 +43,3 @@ RUN flutter config --no-cli-animations && \
     flutter pub global activate script_runner
 
 ENV PATH="/root/.pub-cache/bin:${PATH}"
-
-RUN which scr
